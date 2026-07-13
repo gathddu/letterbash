@@ -9,6 +9,32 @@
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
     in
     {
+      packages = forAllSystems (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+          pythonPackages = pkgs.python312Packages;
+        in
+        {
+          default = pythonPackages.buildPythonApplication {
+            pname = "letterbash";
+            version = "0.1.0";
+            pyproject = true;
+
+            src = pkgs.lib.fileset.toSource {
+              root = ./.;
+              fileset = pkgs.lib.fileset.unions [
+                ./README.md
+                ./pyproject.toml
+                ./src
+              ];
+            };
+
+            build-system = [ pythonPackages.hatchling ];
+          };
+        }
+      );
+
       devShells = forAllSystems (
         system:
         let
