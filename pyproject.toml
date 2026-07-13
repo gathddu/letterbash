@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "letterbash"
+version = "0.1.0"
+description = "A terminal application that helps you choose a film from your watchlist."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+letterbash = "letterbash.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/letterbash"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
