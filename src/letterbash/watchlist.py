@@ -10,7 +10,7 @@ from typing import TextIO
 class WatchlistEntry:
     added_on: date
     name: str
-    year: int
+    year: int | None
     letterboxd_uri: str
 
 
@@ -23,7 +23,7 @@ def parse_watchlist(source: TextIO) -> list[WatchlistEntry]:
             WatchlistEntry(
                 added_on=date.fromisoformat(row["Date"]),
                 name=row["Name"],
-                year=int(row["Year"]),
+                year=int(row["Year"]) if row["Year"] else None,
                 letterboxd_uri=row["Letterboxd URI"],
             )
         )

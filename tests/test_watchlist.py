@@ -18,3 +18,21 @@ def test_parse_watchlist_reads_an_export_row() -> None:
             letterboxd_uri="https://boxd.it/7hJK",
         )
     ]
+
+
+def test_parse_watchlist_reads_a_row_without_a_year() -> None:
+    source = StringIO(
+        "Date,Name,Year,Letterboxd URI\n"
+        "2025-02-03,Unknown Film,,https://boxd.it/example\n"
+    )
+
+    entries = parse_watchlist(source)
+
+    assert entries == [
+        WatchlistEntry(
+            added_on=date(2025, 2, 3),
+            name="Unknown Film",
+            year=None,
+            letterboxd_uri="https://boxd.it/example",
+        )
+    ]
