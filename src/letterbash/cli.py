@@ -12,6 +12,10 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     arguments = list(sys.argv[1:] if argv is None else argv)
 
+    if arguments and arguments[0] not in {"import", "pick"}:
+        print(f"letterbash: unknown command: {arguments[0]}", file=sys.stderr)
+        return 2
+
     if len(arguments) == 2 and arguments[0] in {"import", "pick"}:
         command, raw_watchlist_path = arguments
         watchlist_path = Path(raw_watchlist_path)

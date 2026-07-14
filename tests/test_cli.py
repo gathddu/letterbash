@@ -105,3 +105,14 @@ def test_main_picks_a_film_without_a_year(
     assert exit_code == 0
     assert captured.out == "Film Without a Year\n"
     assert captured.err == ""
+
+
+def test_main_rejects_an_unknown_command(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    exit_code = main(["surprise"])
+
+    captured = capsys.readouterr()
+    assert exit_code == 2
+    assert captured.out == ""
+    assert captured.err == "letterbash: unknown command: surprise\n"
