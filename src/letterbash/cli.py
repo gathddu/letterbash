@@ -36,7 +36,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"letterbash: {error}", file=sys.stderr)
             return 1
 
-        print(f"{selected.name} ({selected.year})")
+        if selected.year is None:
+            print(selected.name)
+        else:
+            print(f"{selected.name} ({selected.year})")
         return 0
 
     print("letterbash: find the film that fits")

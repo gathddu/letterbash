@@ -86,3 +86,22 @@ def test_main_reports_a_missing_watchlist(
     assert exit_code == 1
     assert captured.out == ""
     assert captured.err == f"letterbash: watchlist not found: {watchlist}\n"
+
+
+def test_main_picks_a_film_without_a_year(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    watchlist = tmp_path / "watchlist.csv"
+    watchlist.write_text(
+        "Date,Name,Year,Letterboxd URI\n"
+        "2026-07-14,Film Without a Year,,https://letterboxd.com/film/no-year/\n",
+        encoding="utf-8",
+    )
+
+    exit_code = main(["pick", str(watchlist)])
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert captured.out == "Film Without a Year\n"
+    assert captured.err == ""
