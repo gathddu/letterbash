@@ -25,7 +25,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         with watchlist_path.open(encoding="utf-8", newline="") as source:
             entries = parse_watchlist(source)
 
-        selected = choose_film(entries)
+        try:
+            selected = choose_film(entries)
+        except ValueError as error:
+            print(f"letterbash: {error}", file=sys.stderr)
+            return 1
         print(f"{selected.name} ({selected.year})")
         return 0
 

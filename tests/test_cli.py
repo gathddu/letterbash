@@ -52,3 +52,21 @@ def test_main_picks_a_film_from_watchlist(
     captured = capsys.readouterr()
     assert exit_code == 0
     assert captured.out == "Good Luck (2014)\n"
+
+
+def test_main_reports_an_empty_watchlist(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    watchlist = tmp_path / "watchlist.csv"
+    watchlist.write_text(
+        "Date,Name,Year,Letterboxd URI\n",
+        encoding="utf-8",
+    )
+
+    exit_code = main(["pick", str(watchlist)])
+
+    captured = capsys.readouterr()
+    assert exit_code == 1
+    assert captured.out == ""
+    assert captured.err == "letterbash: can't choose a film from an empty watchlist\n"
