@@ -4,6 +4,8 @@ from random import Random
 from letterbash.selection import choose_film
 from letterbash.watchlist import WatchlistEntry
 
+import pytest
+
 
 def test_choose_film_returns_the_only_candidate() -> None:
     candidate = WatchlistEntry(
@@ -34,3 +36,11 @@ def test_choose_film_can_select_among_multiple_candidates() -> None:
     selected = choose_film([first, second], rng=Random(0))
 
     assert selected == second
+
+
+def test_choose_film_rejects_an_empty_watchlist() -> None:
+    with pytest.raises(
+        ValueError,
+        match="can't choose a film from an empty watchlist",
+    ):
+        choose_film([])

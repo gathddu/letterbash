@@ -8,6 +8,9 @@ def choose_film(
     *,
     rng: Random | None = None,
 ) -> WatchlistEntry:
+    if not candidates:
+        raise ValueError("can't choose a film from an empty watchlist")
+
     if rng is None:
         return choice(candidates)
 
