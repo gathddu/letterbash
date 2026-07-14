@@ -72,13 +72,15 @@ def test_main_reports_an_empty_watchlist(
     assert captured.err == "letterbash: can't choose a film from an empty watchlist\n"
 
 
+@pytest.mark.parametrize("command", ["import", "pick"])
 def test_main_reports_a_missing_watchlist(
+    command: str,
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
     watchlist = tmp_path / "missing.csv"
 
-    exit_code = main(["pick", str(watchlist)])
+    exit_code = main([command, str(watchlist)])
 
     captured = capsys.readouterr()
     assert exit_code == 1
