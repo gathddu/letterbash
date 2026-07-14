@@ -129,3 +129,16 @@ def test_main_rejects_a_command_without_a_watchlist_path(
     assert exit_code == 2
     assert captured.out == ""
     assert captured.err == f"letterbash: {command} requires a watchlist path\n"
+
+
+@pytest.mark.parametrize("command", ["import", "pick"])
+def test_main_rejects_extra_command_arguments(
+    command: str,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    exit_code = main([command, "watchlist.csv", "extra"])
+
+    captured = capsys.readouterr()
+    assert exit_code == 2
+    assert captured.out == ""
+    assert captured.err == f"letterbash: {command} accepts only one watchlist path\n"

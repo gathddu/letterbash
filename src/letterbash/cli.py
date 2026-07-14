@@ -23,6 +23,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         return 2
 
+    if len(arguments) > 2:
+        command = arguments[0]
+        print(
+            f"letterbash: {command} accepts only one watchlist path",
+            file=sys.stderr,
+        )
+        return 2
+
     if len(arguments) == 2 and arguments[0] in {"import", "pick"}:
         command, raw_watchlist_path = arguments
         watchlist_path = Path(raw_watchlist_path)
