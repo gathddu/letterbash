@@ -22,8 +22,16 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if len(arguments) == 2 and arguments[0] == "pick":
         watchlist_path = Path(arguments[1])
-        with watchlist_path.open(encoding="utf-8", newline="") as source:
-            entries = parse_watchlist(source)
+        try:
+            with watchlist_path.open(encoding="utf-8", newline="") as source:
+                entries = parse_watchlist(source)
+
+        except FileNotFoundError:
+            print(
+                f"letterbash: watchlist not found: {watchlist_path}",
+                file=sys.stderr,
+            )
+            return 1
 
         try:
             selected = choose_film(entries)
