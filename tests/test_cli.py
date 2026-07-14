@@ -34,3 +34,21 @@ def test_main_reports_watchlist_count(
     assert exit_code == 0
     assert captured.out == "watchlist has 2 films\n"
     assert captured.err == ""
+
+
+def test_main_picks_a_film_from_watchlist(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    watchlist = tmp_path / "watchlist.csv"
+    watchlist.write_text(
+        "Date,Name,Year,Letterboxd URI\n"
+        "2023-01-04,Good Luck,2014,https://boxd.it/7hJK\n",
+        encoding="utf-8",
+    )
+
+    exit_code = main(["pick", str(watchlist)])
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert captured.out == "Good Luck (2014)\n"
