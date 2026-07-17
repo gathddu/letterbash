@@ -177,3 +177,25 @@ def test_main_prints_version(
     assert exit_code == 0
     assert captured.out == "letterbash 0.1.0\n"
     assert captured.err == ""
+
+
+@pytest.mark.parametrize("command", ["import", "pick"])
+def test_main_reports_a_watchlist_with_a_missing_required_column(
+    command: str,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    watchlist = tmp_path / "watchlist.csv"
+    watchlist.write_text(
+        "Date,Name,Year\n2026-07-14,Film,2024\n",
+        encoding="utf-8",
+    )
+
+    exit_code = main([command, str(watchlist)])
+
+    captured = capsys.readouterr()
+    assert exit_code == 1
+    assert captured.out == ""
+    assert captured.err == (
+        "letterbash: missing required watchlist column: Letterboxd URI\n"
+    )

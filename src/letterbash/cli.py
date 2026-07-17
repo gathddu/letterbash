@@ -62,6 +62,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 file=sys.stderr,
             )
             return 1
+        except ValueError as error:
+            print(f"letterbash: {error}", file=sys.stderr)
+            return 1
 
         if command == "import":
             print(f"watchlist has {len(entries)} films")
