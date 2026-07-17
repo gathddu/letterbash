@@ -73,3 +73,13 @@ def test_parse_watchlist_rejects_an_invalid_date() -> None:
         match="^invalid watchlist date: not-a-date$",
     ):
         parse_watchlist(source)
+
+
+def test_parse_watchlist_rejects_an_incomplete_row() -> None:
+    source = StringIO("Date,Name,Year,Letterboxd URI\n2026-07-14,Film,2024\n")
+
+    with pytest.raises(
+        ValueError,
+        match=("^watchlist row 2 is missing a value for: Letterboxd URI$"),
+    ):
+        parse_watchlist(source)

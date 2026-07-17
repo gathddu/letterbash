@@ -27,6 +27,13 @@ def parse_watchlist(source: TextIO) -> list[WatchlistEntry]:
     entries: list[WatchlistEntry] = []
 
     for row in reader:
+        missing_values = [column for column in required_columns if row[column] is None]
+        if missing_values:
+            raise ValueError(
+                f"watchlist row {reader.line_num} is missing a value for: "
+                f"{missing_values[0]}"
+            )
+
         raw_year = row["Year"]
         try:
             year = int(raw_year) if raw_year else None
