@@ -143,3 +143,13 @@ def test_parse_watchlist_rejects_malformed_csv() -> None:
         match="^malformed watchlist CSV: unexpected end of data$",
     ):
         parse_watchlist(source)
+
+
+def test_parse_watchlist_rejects_a_malformed_header() -> None:
+    source = StringIO('"Date,Name,Year,Letterboxd URI\n')
+
+    with pytest.raises(
+        ValueError,
+        match="^malformed watchlist CSV: unexpected end of data$",
+    ):
+        parse_watchlist(source)

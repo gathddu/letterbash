@@ -18,7 +18,11 @@ def parse_watchlist(source: TextIO) -> list[WatchlistEntry]:
     reader = csv.DictReader(source, strict=True)
     required_columns = ("Date", "Name", "Year", "Letterboxd URI")
     required_value_columns = ("Date", "Name", "Letterboxd URI")
-    fieldnames = reader.fieldnames or []
+
+    try:
+        fieldnames = reader.fieldnames or []
+    except csv.Error as error:
+        raise ValueError(f"malformed watchlist CSV: {error}") from error
     duplicate_columns = [
         column
         for index, column in enumerate(fieldnames)
