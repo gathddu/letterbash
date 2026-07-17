@@ -29,6 +29,11 @@ def parse_watchlist(source: TextIO) -> list[WatchlistEntry]:
 
     for row in reader:
         missing_values = [column for column in required_columns if row[column] is None]
+        if None in row:
+            raise ValueError(
+                f"watchlist row {reader.line_num} has unexpected extra values"
+            )
+
         if missing_values:
             raise ValueError(
                 f"watchlist row {reader.line_num} is missing a value for: "

@@ -104,3 +104,16 @@ def test_parse_watchlist_rejects_a_blank_required_value(
         match=f"^watchlist row 2 has a blank value for: {column}$",
     ):
         parse_watchlist(source)
+
+
+def test_parse_watchlist_rejects_a_row_with_extra_values() -> None:
+    source = StringIO(
+        "Date,Name,Year,Letterboxd URI\n"
+        "2026-07-14,Film,2024,https://letterboxd.com/film/example/,extra\n"
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="^watchlist row 2 has unexpected extra values$",
+    ):
+        parse_watchlist(source)
