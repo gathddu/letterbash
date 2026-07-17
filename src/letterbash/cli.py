@@ -76,6 +76,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
             return 1
 
+        except UnicodeDecodeError:
+            print(
+                f"letterbash: watchlist is not valid UTF-8: {watchlist_path}",
+                file=sys.stderr,
+            )
+            return 1
+
         except ValueError as error:
             print(f"letterbash: {error}", file=sys.stderr)
             return 1
