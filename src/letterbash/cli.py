@@ -54,7 +54,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         watchlist_path = Path(raw_watchlist_path)
 
         try:
-            with watchlist_path.open(encoding="utf-8", newline="") as source:
+            with watchlist_path.open(encoding="utf-8-sig", newline="") as source:
                 entries = parse_watchlist(source)
         except FileNotFoundError:
             print(

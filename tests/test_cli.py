@@ -257,3 +257,30 @@ def test_main_reports_a_non_utf8_watchlist(
     assert exit_code == 1
     assert captured.out == ""
     assert captured.err == (f"letterbash: watchlist is not valid UTF-8: {watchlist}\n")
+
+
+@pytest.mark.parametrize(
+    ("command", "expected_output"),
+    [
+        ("import", "watchlist has 1 films\n"),
+        ("pick", "Film (2024)\n"),
+    ],
+)
+def test_main_accepts_a_utf8_bom_watchlist(
+    command: str,
+    expected_output: str,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    watchlist = tmp_path / "watchlist.csv"
+    watchlist.write_bytes(
+        b"\xef\xbb\xbfDate,Name,Year,Letterboxd URI\n"
+        b"2026-07-14,Film,2024,https://letterboxd.com/film/example/\n"
+    )
+
+    exit_code = main([command, str(watchlist)])
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert captured.out == expected_output
+    assert captured.err == ""
