@@ -130,3 +130,16 @@ def test_parse_watchlist_rejects_a_duplicate_column() -> None:
         match="^duplicate watchlist column: Name$",
     ):
         parse_watchlist(source)
+
+
+def test_parse_watchlist_rejects_malformed_csv() -> None:
+    source = StringIO(
+        "Date,Name,Year,Letterboxd URI\n"
+        '2026-07-14,"Film,2024,https://letterboxd.com/film/example/\n'
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="^malformed watchlist CSV: unexpected end of data$",
+    ):
+        parse_watchlist(source)
