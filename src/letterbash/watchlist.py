@@ -16,6 +16,14 @@ class WatchlistEntry:
 
 def parse_watchlist(source: TextIO) -> list[WatchlistEntry]:
     reader = csv.DictReader(source)
+    required_columns = ("Date", "Name", "Year", "Letterboxd URI")
+    fieldnames = reader.fieldnames or []
+    missing_columns = [
+        column for column in required_columns if column not in fieldnames
+    ]
+    if missing_columns:
+        raise ValueError(f"missing required watchlist column: {missing_columns[0]}")
+
     entries: list[WatchlistEntry] = []
 
     for row in reader:

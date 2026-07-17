@@ -2,6 +2,7 @@ from datetime import date
 from io import StringIO
 
 from letterbash.watchlist import WatchlistEntry, parse_watchlist
+import pytest
 
 
 def test_parse_watchlist_reads_an_export_row() -> None:
@@ -36,3 +37,13 @@ def test_parse_watchlist_reads_a_row_without_a_year() -> None:
             letterboxd_uri="https://boxd.it/example",
         )
     ]
+
+
+def test_parse_watchlist_rejects_a_missing_required_column() -> None:
+    source = StringIO("Date,Name,Year\n2026-07-14,Film,2024\n")
+
+    with pytest.raises(
+        ValueError,
+        match="^missing required watchlist column: Letterboxd URI$",
+    ):
+        parse_watchlist(source)
