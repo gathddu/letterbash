@@ -60,3 +60,16 @@ def test_parse_watchlist_rejects_an_invalid_year() -> None:
         match="^invalid watchlist year: unknown$",
     ):
         parse_watchlist(source)
+
+
+def test_parse_watchlist_rejects_an_invalid_date() -> None:
+    source = StringIO(
+        "Date,Name,Year,Letterboxd URI\n"
+        "not-a-date,Film,2024,https://letterboxd.com/film/example/\n"
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="^invalid watchlist date: not-a-date$",
+    ):
+        parse_watchlist(source)
