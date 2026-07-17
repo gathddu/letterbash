@@ -69,6 +69,13 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
             return 1
 
+        except PermissionError:
+            print(
+                f"letterbash: permission denied reading watchlist: {watchlist_path}",
+                file=sys.stderr,
+            )
+            return 1
+
         except ValueError as error:
             print(f"letterbash: {error}", file=sys.stderr)
             return 1

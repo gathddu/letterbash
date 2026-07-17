@@ -213,3 +213,27 @@ def test_main_reports_a_watchlist_path_that_is_a_directory(
     assert exit_code == 1
     assert captured.out == ""
     assert captured.err == f"letterbash: watchlist is not a file: {tmp_path}\n"
+
+
+@pytest.mark.parametrize("command", ["import", "pick"])
+def test_main_reports_a_permission_denied_watchlist(
+    command: str,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    watchlist = tmp_path / "watchlist.csv"
+
+    def deny_access(*_: object, **__: object) -> None:
+        raise PermissionError
+
+    monkeypatch.setattr(Path, "open", deny_access)
+
+    exit_code = main([command, str(watchlist)])
+
+    captured = capsys.readouterr()
+    assert exit_code == 1
+    assert captured.out == ""
+    assert captured.err == (
+        f"letterbash: permission denied reading watchlist: {watchlist}\n"
+    )
