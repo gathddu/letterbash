@@ -117,3 +117,16 @@ def test_parse_watchlist_rejects_a_row_with_extra_values() -> None:
         match="^watchlist row 2 has unexpected extra values$",
     ):
         parse_watchlist(source)
+
+
+def test_parse_watchlist_rejects_a_duplicate_column() -> None:
+    source = StringIO(
+        "Date,Name,Year,Letterboxd URI,Name\n"
+        "2026-07-14,First,2024,https://letterboxd.com/film/example/,Second\n"
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="^duplicate watchlist column: Name$",
+    ):
+        parse_watchlist(source)

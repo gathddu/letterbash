@@ -19,6 +19,14 @@ def parse_watchlist(source: TextIO) -> list[WatchlistEntry]:
     required_columns = ("Date", "Name", "Year", "Letterboxd URI")
     required_value_columns = ("Date", "Name", "Letterboxd URI")
     fieldnames = reader.fieldnames or []
+    duplicate_columns = [
+        column
+        for index, column in enumerate(fieldnames)
+        if column in fieldnames[:index]
+    ]
+    if duplicate_columns:
+        raise ValueError(f"duplicate watchlist column: {duplicate_columns[0]}")
+
     missing_columns = [
         column for column in required_columns if column not in fieldnames
     ]
