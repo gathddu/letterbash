@@ -142,3 +142,24 @@ def test_main_rejects_extra_command_arguments(
     assert exit_code == 2
     assert captured.out == ""
     assert captured.err == f"letterbash: {command} accepts only one watchlist path\n"
+
+
+@pytest.mark.parametrize("option", ["--help", "-h"])
+def test_main_prints_help(
+    option: str,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    exit_code = main([option])
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert captured.out == (
+        "usage: letterbash COMMAND PATH\n"
+        "\n"
+        "Choose a film from a Letterboxd watchlist export.\n"
+        "\n"
+        "commands:\n"
+        "  import PATH  show the number of films in the watchlist\n"
+        "  pick PATH    choose a film at random\n"
+    )
+    assert captured.err == ""

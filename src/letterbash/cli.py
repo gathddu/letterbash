@@ -12,6 +12,18 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     arguments = list(sys.argv[1:] if argv is None else argv)
 
+    if len(arguments) == 1 and arguments[0] in {"--help", "-h"}:
+        print(
+            "usage: letterbash COMMAND PATH\n"
+            "\n"
+            "Choose a film from a Letterboxd watchlist export.\n"
+            "\n"
+            "commands:\n"
+            "  import PATH  show the number of films in the watchlist\n"
+            "  pick PATH    choose a film at random"
+        )
+        return 0
+
     if arguments and arguments[0] not in {"import", "pick"}:
         print(f"letterbash: unknown command: {arguments[0]}", file=sys.stderr)
         return 2
