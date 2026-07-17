@@ -83,3 +83,24 @@ def test_parse_watchlist_rejects_an_incomplete_row() -> None:
         match=("^watchlist row 2 is missing a value for: Letterboxd URI$"),
     ):
         parse_watchlist(source)
+
+
+@pytest.mark.parametrize(
+    ("row", "column"),
+    [
+        (",Film,2024,https://letterboxd.com/film/example/", "Date"),
+        ("2026-07-14,,2024,https://letterboxd.com/film/example/", "Name"),
+        ("2026-07-14,Film,2024,", "Letterboxd URI"),
+    ],
+)
+def test_parse_watchlist_rejects_a_blank_required_value(
+    row: str,
+    column: str,
+) -> None:
+    source = StringIO(f"Date,Name,Year,Letterboxd URI\n{row}\n")
+
+    with pytest.raises(
+        ValueError,
+        match=f"^watchlist row 2 has a blank value for: {column}$",
+    ):
+        parse_watchlist(source)
