@@ -7,6 +7,7 @@ from pathlib import Path
 
 from letterbash.selection import choose_film
 from letterbash.watchlist import WatchlistEntry, parse_watchlist
+import os
 
 
 def _load_watchlist(path: Path) -> list[WatchlistEntry]:
@@ -39,12 +40,16 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"letterbash: unknown command: {arguments[0]}", file=sys.stderr)
         return 2
     if len(arguments) == 1:
-        command = arguments[0]
-        print(
-            f"letterbash: {command} requires a watchlist path",
-            file=sys.stderr,
-        )
-        return 2
+        configured_watchlist = os.environ.get("LETTERBASH_WATCHLIST")
+        if configured_watchlist:
+            arguments.append(configured_watchlist)
+        else:
+            command = arguments[0]
+            print(
+                f"letterbash: {command} requires a watchlist path",
+                file=sys.stderr,
+            )
+            return 2
 
     if len(arguments) > 2:
         command = arguments[0]
