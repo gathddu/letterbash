@@ -37,7 +37,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             "  pick [PATH]    choose a film at random\n"
             "\n"
             "environment:\n"
-            "  LETTERBASH_WATCHLIST  default path when PATH is omitted"
+            "  LETTERBASH_WATCHLIST  default path when PATH is omitted\n"
+            "  XDG default           $XDG_DATA_HOME/letterbash/watchlist.csv\n"
+            "                        ~/.local/share/letterbash/watchlist.csv when XDG_DATA_HOME is unset"
         )
         return 0
 

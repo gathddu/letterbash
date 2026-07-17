@@ -168,6 +168,8 @@ def test_main_prints_help(
         "\n"
         "environment:\n"
         "  LETTERBASH_WATCHLIST  default path when PATH is omitted\n"
+        "  XDG default           $XDG_DATA_HOME/letterbash/watchlist.csv\n"
+        "                        ~/.local/share/letterbash/watchlist.csv when XDG_DATA_HOME is unset\n"
     )
     assert captured.err == ""
 
