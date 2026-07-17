@@ -21,13 +21,16 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if len(arguments) == 1 and arguments[0] in {"--help", "-h"}:
         print(
-            "usage: letterbash COMMAND PATH\n"
+            "usage: letterbash COMMAND [PATH]\n"
             "\n"
             "Choose a film from a Letterboxd watchlist export.\n"
             "\n"
             "commands:\n"
-            "  import PATH  show the number of films in the watchlist\n"
-            "  pick PATH    choose a film at random"
+            "  import [PATH]  show the number of films in the watchlist\n"
+            "  pick [PATH]    choose a film at random\n"
+            "\n"
+            "environment:\n"
+            "  LETTERBASH_WATCHLIST  default path when PATH is omitted"
         )
         return 0
 

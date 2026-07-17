@@ -156,13 +156,16 @@ def test_main_prints_help(
     captured = capsys.readouterr()
     assert exit_code == 0
     assert captured.out == (
-        "usage: letterbash COMMAND PATH\n"
+        "usage: letterbash COMMAND [PATH]\n"
         "\n"
         "Choose a film from a Letterboxd watchlist export.\n"
         "\n"
         "commands:\n"
-        "  import PATH  show the number of films in the watchlist\n"
-        "  pick PATH    choose a film at random\n"
+        "  import [PATH]  show the number of films in the watchlist\n"
+        "  pick [PATH]    choose a film at random\n"
+        "\n"
+        "environment:\n"
+        "  LETTERBASH_WATCHLIST  default path when PATH is omitted\n"
     )
     assert captured.err == ""
 
