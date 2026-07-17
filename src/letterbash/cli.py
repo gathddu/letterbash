@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import importlib.metadata
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -22,6 +23,11 @@ def main(argv: Sequence[str] | None = None) -> int:
             "  import PATH  show the number of films in the watchlist\n"
             "  pick PATH    choose a film at random"
         )
+        return 0
+
+    if arguments == ["--version"]:
+        package_version = importlib.metadata.version("letterbash")
+        print(f"letterbash {package_version}")
         return 0
 
     if arguments and arguments[0] not in {"import", "pick"}:

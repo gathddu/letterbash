@@ -163,3 +163,17 @@ def test_main_prints_help(
         "  pick PATH    choose a film at random\n"
     )
     assert captured.err == ""
+
+
+def test_main_prints_version(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    monkeypatch.setattr("importlib.metadata.version", lambda _: "0.1.0")
+
+    exit_code = main(["--version"])
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert captured.out == "letterbash 0.1.0\n"
+    assert captured.err == ""
