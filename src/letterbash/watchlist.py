@@ -27,11 +27,17 @@ def parse_watchlist(source: TextIO) -> list[WatchlistEntry]:
     entries: list[WatchlistEntry] = []
 
     for row in reader:
+        raw_year = row["Year"]
+        try:
+            year = int(raw_year) if raw_year else None
+        except ValueError as error:
+            raise ValueError(f"invalid watchlist year: {raw_year}") from error
+
         entries.append(
             WatchlistEntry(
                 added_on=date.fromisoformat(row["Date"]),
                 name=row["Name"],
-                year=int(row["Year"]) if row["Year"] else None,
+                year=year,
                 letterboxd_uri=row["Letterboxd URI"],
             )
         )

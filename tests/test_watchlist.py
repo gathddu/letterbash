@@ -47,3 +47,16 @@ def test_parse_watchlist_rejects_a_missing_required_column() -> None:
         match="^missing required watchlist column: Letterboxd URI$",
     ):
         parse_watchlist(source)
+
+
+def test_parse_watchlist_rejects_an_invalid_year() -> None:
+    source = StringIO(
+        "Date,Name,Year,Letterboxd URI\n"
+        "2026-07-14,Film,unknown,https://letterboxd.com/film/example/\n"
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="^invalid watchlist year: unknown$",
+    ):
+        parse_watchlist(source)
