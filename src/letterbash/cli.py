@@ -6,7 +6,12 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from letterbash.selection import choose_film
-from letterbash.watchlist import parse_watchlist
+from letterbash.watchlist import WatchlistEntry, parse_watchlist
+
+
+def _load_watchlist(path: Path) -> list[WatchlistEntry]:
+    with path.open(encoding="utf-8-sig", newline="") as source:
+        return parse_watchlist(source)
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -54,8 +59,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         watchlist_path = Path(raw_watchlist_path)
 
         try:
-            with watchlist_path.open(encoding="utf-8-sig", newline="") as source:
-                entries = parse_watchlist(source)
+            entries = _load_watchlist(watchlist_path)
         except FileNotFoundError:
             print(
                 f"letterbash: watchlist not found: {watchlist_path}",
