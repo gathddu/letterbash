@@ -62,6 +62,13 @@ def main(argv: Sequence[str] | None = None) -> int:
                 file=sys.stderr,
             )
             return 1
+        except IsADirectoryError:
+            print(
+                f"letterbash: watchlist is not a file: {watchlist_path}",
+                file=sys.stderr,
+            )
+            return 1
+
         except ValueError as error:
             print(f"letterbash: {error}", file=sys.stderr)
             return 1

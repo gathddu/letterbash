@@ -199,3 +199,17 @@ def test_main_reports_a_watchlist_with_a_missing_required_column(
     assert captured.err == (
         "letterbash: missing required watchlist column: Letterboxd URI\n"
     )
+
+
+@pytest.mark.parametrize("command", ["import", "pick"])
+def test_main_reports_a_watchlist_path_that_is_a_directory(
+    command: str,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    exit_code = main([command, str(tmp_path)])
+
+    captured = capsys.readouterr()
+    assert exit_code == 1
+    assert captured.out == ""
+    assert captured.err == f"letterbash: watchlist is not a file: {tmp_path}\n"
