@@ -121,10 +121,12 @@ def test_main_rejects_an_unknown_command(
 @pytest.mark.parametrize("command", ["import", "pick"])
 def test_main_rejects_a_command_without_a_watchlist_path(
     command: str,
+    tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    monkeypatch.delenv("LETTERBASH_WATCHLIS", raising=False)
+    monkeypatch.delenv("LETTERBASH_WATCHLIST", raising=False)
+    monkeypatch.setenv("XDG_DATA_HOME", str(tmp_path / "data"))
     exit_code = main([command])
 
     captured = capsys.readouterr()
@@ -312,6 +314,39 @@ def test_main_uses_the_configured_watchlist_when_path_is_omitted(
         encoding="utf-8",
     )
     monkeypatch.setenv("LETTERBASH_WATCHLIST", str(watchlist))
+
+    exit_code = main([command])
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert captured.out == expected_output
+    assert captured.err == ""
+
+
+@pytest.mark.parametrize(
+    ("command", "expected_output"),
+    [
+        ("import", "watchlist has 1 films\n"),
+        ("pick", "Film (2024)\n"),
+    ],
+)
+def test_main_uses_the_xdg_watchlist_when_path_is_omitted(
+    command: str,
+    expected_output: str,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    data_home = tmp_path / "data"
+    watchlist = data_home / "letterbash" / "watchlist.csv"
+    watchlist.parent.mkdir(parents=True)
+    watchlist.write_text(
+        "Date,Name,Year,Letterboxd URI\n"
+        "2026-07-14,Film,2024,https://letterboxd.com/film/example/\n",
+        encoding="utf-8",
+    )
+    monkeypatch.delenv("LETTERBASH_WATCHLIST", raising=False)
+    monkeypatch.setenv("XDG_DATA_HOME", str(data_home))
 
     exit_code = main([command])
 

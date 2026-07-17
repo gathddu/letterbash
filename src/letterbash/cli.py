@@ -15,6 +15,13 @@ def _load_watchlist(path: Path) -> list[WatchlistEntry]:
         return parse_watchlist(source)
 
 
+def _default_watchlist_path() -> Path:
+    data_home = os.environ.get("XDG_DATA_HOME")
+    if data_home:
+        return Path(data_home) / "letterbash" / "watchlist.csv"
+    return Path.home() / ".local" / "share" / "letterbash" / "watchlist.csv"
+
+
 def main(argv: Sequence[str] | None = None) -> int:
 
     arguments = list(sys.argv[1:] if argv is None else argv)
@@ -44,8 +51,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 2
     if len(arguments) == 1:
         configured_watchlist = os.environ.get("LETTERBASH_WATCHLIST")
+        default_watchlist = _default_watchlist_path()
+
         if configured_watchlist:
             arguments.append(configured_watchlist)
+        elif default_watchlist.exists():
+            arguments.append(str(default_watchlist))
         else:
             command = arguments[0]
             print(
