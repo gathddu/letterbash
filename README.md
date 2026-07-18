@@ -2,16 +2,29 @@
 
 Letterbash is a terminal application that helps you choose a film from your watchlist.
 
+For now: It validates a watchlist CSV, reports its size and can choose a film at random.
+Moving forwards: A short, adaptive AI that understands my mood and recommends the best-fitting film already in my watchlist.
+
+## Commands
+
+```
+letterbash --help
+letterbash import [PATH]
+letterbash pick [PATH]
+```
+
+`PATH` is optional. When it's omitted, Letterbash checks `LETTERBASH_WATCHLIST`, then `$XDG_DATA_HOME/letterbash/watchlist.csv` and `~/.local/share/letterbash/watchlist.csv` when `XDG_DATA_HOME` is unset.
+
 | File | Responsibility |
 | ---- | -------------- |
 | `src/letterbash/cli.py` | Command routing, terminal output, diagnostics  and process exit codes |
 | `src/letterbash/watchlist.py` | Letterboxd CSV parsing and `WatchlistEntry` construction |
-| `src/letterbash/selection.py` | Random film selection and empty-candidate validation |
+| `src/letterbash/selection.py` | Curent film selection and empty-candidate validation |
 | `tests/test_cli.py` | Command-line acceptance contracts |
 | `tests/test_watchlist.py` | Parser contracts and malformed-input behavior |
 | `tests/test_selection.py` | Selection-domain contracts and deterministic random tests |
 | `flake.nix` | Reproducible package and development-shell definitions |
-| `pyproject.toml` | Python metadata, entry point, build system and test configuration |
+| `pyproject.toml` | Python metadata, entry point, build system and tool configuration |
 
 ## To-Do
 
