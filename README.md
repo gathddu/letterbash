@@ -2,8 +2,7 @@
 
 Letterbash is a terminal application that helps you choose a film from your watchlist.
 
-For now: It validates a watchlist CSV, reports its size and can choose a film at random.
-Moving forwards: A short, adaptive AI that understands my mood and recommends the best-fitting film already in my watchlist.
+An AI recommender might happen someday. Right now, I'm broke, my laptop is old and I'm tired, so Letterbash picks at random. Fate has no subscription fee.
 
 ## Commands
 
@@ -39,10 +38,10 @@ letterbash pick [PATH]
 - [X] Add help and version output
 - [X] Validate required columns, years and dates
 - [X] Package Letterbash with Nix
-- [ ] Reject truncated or otherwise malformed CSV rows cleanly
-- [ ] Decide how blank required cell values should be handled
-- [ ] Add final packaged acceptance checks against the real export
-- [ ] Run `nix flake check` as part of the release gate
+- [X] Reject truncated or otherwise malformed CSV rows cleanly
+- [X] Decide how blank required cell values should be handled
+- [X] Add final packaged acceptance checks against the real export
+- [X] Run `nix flake check` as part of the release gate
 - [ ] Add a license
 - [ ] Tag the first release
 - [ ] Decide whether `import` remains a public command or is replaced by validation/status output
